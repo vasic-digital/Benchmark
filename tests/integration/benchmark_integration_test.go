@@ -74,7 +74,7 @@ func (m *mockVerifierService) GetTopProviders(count int) []string {
 
 func TestRunner_ListBenchmarks_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -96,7 +96,7 @@ func TestRunner_ListBenchmarks_Integration(t *testing.T) {
 
 func TestRunner_GetBenchmark_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -111,7 +111,7 @@ func TestRunner_GetBenchmark_Integration(t *testing.T) {
 
 func TestRunner_GetBenchmark_NotFound_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -124,7 +124,7 @@ func TestRunner_GetBenchmark_NotFound_Integration(t *testing.T) {
 
 func TestRunner_GetTasks_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -143,7 +143,7 @@ func TestRunner_GetTasks_Integration(t *testing.T) {
 
 func TestRunner_GetTasks_WithDifficultyFilter_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -163,7 +163,7 @@ func TestRunner_GetTasks_WithDifficultyFilter_Integration(t *testing.T) {
 
 func TestRunner_GetTasks_WithTagFilter_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -191,7 +191,7 @@ func TestRunner_GetTasks_WithTagFilter_Integration(t *testing.T) {
 
 func TestRunner_GetTasks_WithMaxTasks_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -208,7 +208,7 @@ func TestRunner_GetTasks_WithMaxTasks_Integration(t *testing.T) {
 
 func TestRunner_CreateAndStartRun_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := &mockLLMProvider{response: "B", tokens: 15}
@@ -241,7 +241,7 @@ func TestRunner_CreateAndStartRun_Integration(t *testing.T) {
 
 func TestRunner_ListRuns_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -263,7 +263,7 @@ func TestRunner_ListRuns_Integration(t *testing.T) {
 
 func TestRunner_CancelRun_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -286,7 +286,7 @@ func TestRunner_CancelRun_Integration(t *testing.T) {
 
 func TestRunner_AddCustomBenchmark_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -327,7 +327,7 @@ func TestRunner_AddCustomBenchmark_Integration(t *testing.T) {
 
 func TestBenchmarkSystem_Initialize_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkSystemConfig()
@@ -347,7 +347,7 @@ func TestBenchmarkSystem_Initialize_Integration(t *testing.T) {
 
 func TestBenchmarkSystem_WithDebateService_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkSystemConfig()
@@ -364,7 +364,7 @@ func TestBenchmarkSystem_WithDebateService_Integration(t *testing.T) {
 
 func TestBenchmarkSystem_WithVerifierService_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkSystemConfig()
@@ -383,7 +383,7 @@ func TestBenchmarkSystem_WithVerifierService_Integration(t *testing.T) {
 
 func TestVerifierAdapter_SelectBestProvider_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	service := &mockVerifierService{
@@ -400,7 +400,7 @@ func TestVerifierAdapter_SelectBestProvider_Integration(t *testing.T) {
 
 func TestDebateAdapter_EvaluateResponse_Integration(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping integration test in short mode")
+		t.Skip("skipping integration test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	debateService := &mockDebateService{confidence: 0.85}

@@ -89,7 +89,7 @@ func (s *e2eVerifierService) GetTopProviders(count int) []string {
 
 func TestFullBenchmarkWorkflow_MMLU_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := newE2EProvider()
@@ -139,7 +139,7 @@ func TestFullBenchmarkWorkflow_MMLU_E2E(t *testing.T) {
 
 func TestFullBenchmarkWorkflow_SWEBench_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := newE2EProvider()
@@ -170,7 +170,7 @@ func TestFullBenchmarkWorkflow_SWEBench_E2E(t *testing.T) {
 
 func TestFullBenchmarkWorkflow_CompareRuns_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := newE2EProvider()
@@ -211,7 +211,7 @@ func TestFullBenchmarkWorkflow_CompareRuns_E2E(t *testing.T) {
 
 func TestFullBenchmarkWorkflow_CustomBenchmark_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := &e2eLLMProvider{
@@ -277,7 +277,7 @@ func TestFullBenchmarkWorkflow_CustomBenchmark_E2E(t *testing.T) {
 
 func TestBenchmarkSystem_FullWorkflow_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkSystemConfig()
@@ -298,7 +298,7 @@ func TestBenchmarkSystem_FullWorkflow_E2E(t *testing.T) {
 
 func TestBenchmarkSystem_WithVerifier_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkSystemConfig()
@@ -318,7 +318,7 @@ func TestBenchmarkSystem_WithVerifier_E2E(t *testing.T) {
 
 func TestBenchmarkSystem_GenerateLeaderboard_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	provider := newE2EProvider()
@@ -354,7 +354,7 @@ func TestBenchmarkSystem_GenerateLeaderboard_E2E(t *testing.T) {
 
 func TestRunner_ListRuns_WithFilter_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	runner := benchmark.NewStandardBenchmarkRunner(nil, nil)
@@ -387,7 +387,7 @@ func TestRunner_ListRuns_WithFilter_E2E(t *testing.T) {
 
 func TestDefaultBenchmarkConfig_E2E(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping e2e test in short mode")
+		t.Skip("skipping e2e test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	config := benchmark.DefaultBenchmarkConfig()

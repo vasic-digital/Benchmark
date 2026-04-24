@@ -29,7 +29,7 @@ func (p *stressLLMProvider) GetName() string {
 
 func TestRunner_ConcurrentListBenchmarks_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 100
@@ -58,7 +58,7 @@ func TestRunner_ConcurrentListBenchmarks_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentGetBenchmark_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 75
@@ -88,7 +88,7 @@ func TestRunner_ConcurrentGetBenchmark_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentCreateRun_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 80
@@ -133,7 +133,7 @@ func TestRunner_ConcurrentCreateRun_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentGetTasks_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 60
@@ -172,7 +172,7 @@ func TestRunner_ConcurrentGetTasks_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentStartRun_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 50
@@ -220,7 +220,7 @@ func TestRunner_ConcurrentStartRun_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentListRuns_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 75
@@ -258,7 +258,7 @@ func TestRunner_ConcurrentListRuns_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentCancelRun_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 60
@@ -295,7 +295,7 @@ func TestRunner_ConcurrentCancelRun_Stress(t *testing.T) {
 
 func TestRunner_ConcurrentAddBenchmark_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 50
@@ -340,7 +340,7 @@ func TestRunner_ConcurrentAddBenchmark_Stress(t *testing.T) {
 
 func TestBenchmarkSystem_ConcurrentInitialize_Stress(t *testing.T) {
 	if testing.Short() {
-		t.Skip("skipping stress test in short mode")
+		t.Skip("skipping stress test in short mode")  // SKIP-OK: #short-mode
 	}
 
 	const goroutines = 50
