@@ -2,6 +2,7 @@ package benchmark
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -11,6 +12,22 @@ import (
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
+
+// ErrBenchmarkProviderNotConfigured is returned by executeTask when the
+// StandardBenchmarkRunner is invoked without a real LLMProvider injected
+// via NewStandardBenchmarkRunner(provider, ...). Previously the executor
+// silently filled BenchmarkResult.Response with the string
+// "no provider available" and continued grading the empty response — a
+// CRITICAL PASS-bluff at the benchmark-runner layer (round-23 §11.4
+// audit, 2026-05-17): downstream consumers received "benchmark
+// completed" runs whose pass-rate / latency / token-usage metrics were
+// fabricated from a placeholder string, with no error surfaced.
+//
+// Per CONST-035 / Article XI §11.9 / CONST-050(A), production code MUST
+// surface a sentinel error so consumers know to inject a real provider
+// before running benchmarks; an echo / placeholder default is permitted
+// only inside *_test.go files via dependency injection.
+var ErrBenchmarkProviderNotConfigured = errors.New("benchmark: LLMProvider not configured — pass a real provider to NewStandardBenchmarkRunner(...) before running benchmarks (the previous \"no provider available\" placeholder produced fabricated benchmark metrics; §11.4 PASS-bluff removed)")
 
 // StandardBenchmarkRunner implements BenchmarkRunner
 type StandardBenchmarkRunner struct {
@@ -543,21 +560,25 @@ func (r *StandardBenchmarkRunner) executeTask(ctx context.Context, run *Benchmar
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	// Get response from LLM
-	if r.provider != nil {
-		response, tokens, err := r.provider.Complete(ctx, task.Prompt, run.Config.SystemPrompt)
-		if err != nil {
-			result.Error = err.Error()
-			result.Passed = false
-			result.Latency = time.Since(start)
-			return result
-		}
-
-		result.Response = response
-		result.TokensUsed = tokens
-	} else {
-		result.Response = "no provider available"
+	// Get response from LLM — provider MUST be injected; the previous
+	// silent fallback to "no provider available" was a PASS-bluff
+	// (round-23 §11.4 audit, 2026-05-17). Surface a sentinel error.
+	if r.provider == nil {
+		result.Error = ErrBenchmarkProviderNotConfigured.Error()
+		result.Passed = false
+		result.Latency = time.Since(start)
+		return result
 	}
+	response, tokens, err := r.provider.Complete(ctx, task.Prompt, run.Config.SystemPrompt)
+	if err != nil {
+		result.Error = err.Error()
+		result.Passed = false
+		result.Latency = time.Since(start)
+		return result
+	}
+
+	result.Response = response
+	result.TokensUsed = tokens
 
 	result.Latency = time.Since(start)
 

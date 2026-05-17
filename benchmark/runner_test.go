@@ -612,6 +612,12 @@ func TestStandardBenchmarkRunner_ExecuteRun_ConcurrentExecution(t *testing.T) {
 }
 
 func TestStandardBenchmarkRunner_ExecuteTask_NilProvider(t *testing.T) {
+	// Round-23 §11.4 audit (2026-05-17): the executeTask path no longer
+	// silently fabricates a "no provider available" response — it now
+	// records ErrBenchmarkProviderNotConfigured.Error() in result.Error,
+	// marks the result not-passed, and leaves Response empty. Consumers
+	// inspecting either run.Results[].Error or the run summary will see
+	// the failure rather than treat fabricated metrics as ground truth.
 	r := NewStandardBenchmarkRunner(nil, nil)
 	ctx := context.Background()
 
@@ -633,9 +639,24 @@ func TestStandardBenchmarkRunner_ExecuteTask_NilProvider(t *testing.T) {
 
 	r.mu.RLock()
 	defer r.mu.RUnlock()
+	require.NotEmpty(t, run.Results, "executeTask should still produce result records so failure is visible")
 	for _, result := range run.Results {
-		assert.Equal(t, "no provider available", result.Response)
+		assert.Empty(t, result.Response, "no provider must NOT fabricate a Response")
+		assert.False(t, result.Passed, "no provider must mark result not-passed")
+		assert.Equal(t, ErrBenchmarkProviderNotConfigured.Error(), result.Error,
+			"executeTask must surface the sentinel error string in result.Error")
 	}
+}
+
+// TestStandardBenchmarkRunner_ExecuteTask_NilProvider_SentinelIsErrorsIs is the
+// regression test mandated by round-23 §11.4 audit: callers MUST be able to
+// distinguish "no provider configured" from arbitrary provider errors via
+// errors.Is on the exported sentinel.
+func TestStandardBenchmarkRunner_ExecuteTask_NilProvider_SentinelIsErrorsIs(t *testing.T) {
+	require.True(t, errors.Is(ErrBenchmarkProviderNotConfigured, ErrBenchmarkProviderNotConfigured),
+		"sentinel must satisfy errors.Is reflexively")
+	require.NotEmpty(t, ErrBenchmarkProviderNotConfigured.Error(),
+		"sentinel must carry a non-empty operator-facing message")
 }
 
 func TestStandardBenchmarkRunner_ExecuteTask_ProviderError(t *testing.T) {
