@@ -1,0 +1,45 @@
+{
+  "_comment": "Round-262 bilingual fixture for digital.vasic.benchmark. Five locales — en, sr (Cyrillic), ja (Japanese), ar (Arabic, RTL), zh-CN (Han). Each entry carries a benchmark-task name + task-prompt + canned LLM response in the target locale plus an ASCII benchmark_id so the run/dispatch path is locale-agnostic. The runner uses these inputs to drive AddBenchmark + StartRun + executeTask + calculateSummary + GenerateLeaderboard end-to-end via a stub LLMProvider implementation whose responses round-trip the locale strings byte-exact (this is the challenge runner, NOT a unit test — the runner exercises the real StandardBenchmarkRunner + BenchmarkSystem code paths). Per CONST-050 the runner is NOT a production binary; the in-process provider satisfies the public LLMProvider interface to drive REAL benchmark machinery.",
+  "inputs": [
+    {
+      "locale": "en",
+      "task_name": "Sum of integers",
+      "task_prompt": "Sum integers from 1 to 100 inclusive.",
+      "expected_substring": "5050",
+      "canned_response": "The answer is 5050. The sum of 1..100 inclusive equals 5050 by Gauss's formula.",
+      "expected_min_runes": 60
+    },
+    {
+      "locale": "sr",
+      "task_name": "Збир целих бројева",
+      "task_prompt": "Сабери целе бројеве од 1 до 100 укључиво.",
+      "expected_substring": "5050",
+      "canned_response": "Одговор је 5050. Збир од 1 до 100 једнак је 5050 по Гаусовој формули.",
+      "expected_min_runes": 50
+    },
+    {
+      "locale": "ja",
+      "task_name": "整数の合計",
+      "task_prompt": "1から100までの整数を合計します。",
+      "expected_substring": "5050",
+      "canned_response": "答えは5050です。ガウスの公式により、1から100までの整数の合計は5050になります。",
+      "expected_min_runes": 25
+    },
+    {
+      "locale": "ar",
+      "task_name": "مجموع الأعداد الصحيحة",
+      "task_prompt": "اجمع الأعداد الصحيحة من 1 إلى 100 شاملةً.",
+      "expected_substring": "5050",
+      "canned_response": "الإجابة هي 5050. مجموع الأعداد من 1 إلى 100 يساوي 5050 وفقاً لمعادلة غاوس.",
+      "expected_min_runes": 40
+    },
+    {
+      "locale": "zh-CN",
+      "task_name": "整数求和",
+      "task_prompt": "求1到100之间所有整数的和。",
+      "expected_substring": "5050",
+      "canned_response": "答案是5050。根据高斯公式，1到100的整数之和等于5050。",
+      "expected_min_runes": 20
+    }
+  ]
+}

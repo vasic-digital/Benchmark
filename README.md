@@ -234,6 +234,69 @@ go build ./...
 go test ./... -count=1 -race
 ```
 
+### Round-262 Challenge runner (5-locale bilingual)
+
+The repository ships a Go-based challenge runner that drives every public
+surface of `digital.vasic.benchmark` through the **real**
+`StandardBenchmarkRunner` + `BenchmarkSystem` machinery using a 5-locale
+bilingual fixture (en, sr Cyrillic, ja Japanese, ar Arabic RTL, zh-CN Han):
+
+```bash
+# Build + run from the module root
+cd Benchmark
+go build -o /tmp/benchmark_round262_runner ./challenges/runner/
+/tmp/benchmark_round262_runner -fixtures tests/fixtures/benchmark/payloads.json
+
+# Paired-mutation gate (clean exit 0; --anti-bluff-mutate exit 99)
+bash challenges/scripts/benchmark_describe_challenge.sh
+bash challenges/scripts/benchmark_describe_challenge.sh --anti-bluff-mutate
+```
+
+The runner produces ~41 PASS lines covering: custom-benchmark add + run with
+per-locale byte-exact response round-trip; all 4 built-ins enumerated; nil
+provider sentinel (`ErrBenchmarkProviderNotConfigured`) instead of placeholder
+bluff; Provider/Verifier/Debate adapter wiring; `BenchmarkSystem` end-to-end;
+`GenerateLeaderboard` with verifier-score merge.
+
+## Anti-bluff guarantees (round-262)
+
+Every PASS in this module's test suite carries **positive runtime evidence**
+(Article XI §11.9 + CONST-035 + CONST-050(B)). The guarantees are:
+
+1. **No placeholder responses.** A `StandardBenchmarkRunner` constructed
+   without an `LLMProvider` surfaces `ErrBenchmarkProviderNotConfigured` per
+   task — never a fabricated "no provider available" string. The previous
+   bluff (round-23 §11.4 audit, 2026-05-17) is permanently locked out.
+2. **Real LLMProvider interface satisfaction.** The challenge runner exercises
+   the real `executeTask`/`evaluateResponse`/`calculateSummary` paths via the
+   public `LLMProvider` contract; no internal mocks are injected.
+3. **Real concurrency.** The runner uses `Concurrency: 4` and asserts all 5
+   locale tasks complete via real worker-pool goroutines.
+4. **Byte-exact non-ASCII round-trip.** The challenge asserts
+   `result.Response` equals the fixture `canned_response` byte-exact per
+   locale — including Cyrillic, Japanese, Arabic (RTL), and Han.
+5. **Real verifier-score merge.** `GenerateLeaderboard` is exercised with a
+   real `VerifierService`; the merged `LeaderboardEntry.VerifierScore` is
+   asserted to equal the source score (0.95).
+6. **Real adapter JSON parsing.** `DebateAdapterForBenchmark` is driven by a
+   real `DebateServiceForBenchmark` whose consensus carries embedded JSON; the
+   adapter's `parseEvaluationResult` is asserted to extract score+passed.
+7. **Paired mutation.** `benchmark_describe_challenge.sh --anti-bluff-mutate`
+   plants a symbol-rename in a tmp copy of `docs/test-coverage.md` and asserts
+   the gate FAILS with exit 99 — proving the gate detects ledger drift rather
+   than rubber-stamping it.
+
+See [`docs/test-coverage.md`](docs/test-coverage.md) for the full symbol →
+test-evidence ledger.
+
+> Verbatim 2026-05-19 operator mandate (Article XI §11.9): *"all existing
+> tests and Challenges do work in anti-bluff manner - they MUST confirm that
+> all tested codebase really works as expected! We had been in position that
+> all tests do execute with success and all Challenges as well, but in reality
+> the most of the features does not work and can't be used! This MUST NOT be
+> the case and execution of tests and Challenges MUST guarantee the quality,
+> the completition and full usability by end users of the product!"*
+
 ## Integration with HelixAgent
 
 Benchmark connects to HelixAgent through adapter types:
