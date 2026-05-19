@@ -66,8 +66,8 @@ func (r *StandardBenchmarkRunner) initBuiltInBenchmarks() {
 	sweBench := &Benchmark{
 		ID:          "swe-bench-lite",
 		Type:        BenchmarkTypeSWEBench,
-		Name:        "SWE-Bench Lite",
-		Description: "Simplified software engineering benchmark tasks",
+		Name:        tr("benchmark.swe_bench_lite.name", nil),
+		Description: tr("benchmark.swe_bench_lite.desc", nil),
 		Version:     "1.0.0",
 		CreatedAt:   time.Now(),
 	}
@@ -79,8 +79,8 @@ func (r *StandardBenchmarkRunner) initBuiltInBenchmarks() {
 	humanEval := &Benchmark{
 		ID:          "humaneval",
 		Type:        BenchmarkTypeHumanEval,
-		Name:        "HumanEval",
-		Description: "Code generation benchmark from OpenAI",
+		Name:        tr("benchmark.humaneval.name", nil),
+		Description: tr("benchmark.humaneval.desc", nil),
 		Version:     "1.0.0",
 		CreatedAt:   time.Now(),
 	}
@@ -92,8 +92,8 @@ func (r *StandardBenchmarkRunner) initBuiltInBenchmarks() {
 	mmlu := &Benchmark{
 		ID:          "mmlu-mini",
 		Type:        BenchmarkTypeMMLU,
-		Name:        "MMLU Mini",
-		Description: "Subset of MMLU benchmark for quick evaluation",
+		Name:        tr("benchmark.mmlu_mini.name", nil),
+		Description: tr("benchmark.mmlu_mini.desc", nil),
 		Version:     "1.0.0",
 		CreatedAt:   time.Now(),
 	}
@@ -105,8 +105,8 @@ func (r *StandardBenchmarkRunner) initBuiltInBenchmarks() {
 	gsm8k := &Benchmark{
 		ID:          "gsm8k-mini",
 		Type:        BenchmarkTypeGSM8K,
-		Name:        "GSM8K Mini",
-		Description: "Subset of GSM8K math benchmark",
+		Name:        tr("benchmark.gsm8k_mini.name", nil),
+		Description: tr("benchmark.gsm8k_mini.desc", nil),
 		Version:     "1.0.0",
 		CreatedAt:   time.Now(),
 	}
@@ -861,13 +861,17 @@ func (r *StandardBenchmarkRunner) CompareRuns(ctx context.Context, runID1, runID
 
 	// Generate summary
 	if len(comparison.Regressions) > len(comparison.Improvements) {
-		comparison.Summary = fmt.Sprintf("Run 2 regressed with %d regressions and %d improvements",
-			len(comparison.Regressions), len(comparison.Improvements))
+		comparison.Summary = tr("compare.run2_regressed", map[string]interface{}{
+			"regressions":  len(comparison.Regressions),
+			"improvements": len(comparison.Improvements),
+		})
 	} else if len(comparison.Improvements) > len(comparison.Regressions) {
-		comparison.Summary = fmt.Sprintf("Run 2 improved with %d improvements and %d regressions",
-			len(comparison.Improvements), len(comparison.Regressions))
+		comparison.Summary = tr("compare.run2_improved", map[string]interface{}{
+			"improvements": len(comparison.Improvements),
+			"regressions":  len(comparison.Regressions),
+		})
 	} else {
-		comparison.Summary = "No significant difference between runs"
+		comparison.Summary = tr("compare.no_difference", nil)
 	}
 
 	return comparison, nil
