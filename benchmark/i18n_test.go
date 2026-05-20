@@ -171,6 +171,108 @@ func TestSetTranslator_RoutesCompareSummary(t *testing.T) {
 	}
 }
 
+// TestSetTranslator_RoutesTaskMetadata is the PAIRED-MUTATION test for the
+// round-409 CONST-046 migration of built-in benchmark TASK Name/Description.
+// With a fake translator installed, every built-in task's user-facing
+// Name/Description MUST carry the translator output (locale prefix) for the
+// fields that were migrated — proving the literals were removed and routed
+// through tr(). If a future change reintroduces a hardcoded
+// "Fix null pointer exception" literal, this test fails.
+//
+// The two HumanEval tasks keep a function-identifier Name
+// (`has_close_elements` / `separate_paren_groups`) — those are NOT user-facing
+// prose and remain literals; only their Description is migrated.
+func TestSetTranslator_RoutesTaskMetadata(t *testing.T) {
+	ft := &fakeTranslator{locale: "xx"}
+	SetTranslator(ft)
+	defer SetTranslator(nil)
+
+	runner := NewStandardBenchmarkRunner(nil, nil)
+	ctx := context.Background()
+
+	// Tasks whose Name AND Description were migrated.
+	nameAndDesc := map[string]struct{ namePfx, descPfx string }{
+		"swe-001":   {"task.swe_001", "task.swe_001"},
+		"swe-002":   {"task.swe_002", "task.swe_002"},
+		"swe-003":   {"task.swe_003", "task.swe_003"},
+		"mmlu-001":  {"task.mmlu_001", "task.mmlu_001"},
+		"mmlu-002":  {"task.mmlu_002", "task.mmlu_002"},
+		"mmlu-003":  {"task.mmlu_003", "task.mmlu_003"},
+		"gsm8k-001": {"task.gsm8k_001", "task.gsm8k_001"},
+		"gsm8k-002": {"task.gsm8k_002", "task.gsm8k_002"},
+	}
+	// Tasks whose Description-only was migrated (Name is a function identifier).
+	descOnly := map[string]string{
+		"he-001": "task.he_001",
+		"he-002": "task.he_002",
+	}
+
+	seen := map[string]bool{}
+	for benchID := range map[string]bool{"swe-bench-lite": true, "humaneval": true, "mmlu-mini": true, "gsm8k-mini": true} {
+		tasks, err := runner.GetTasks(ctx, benchID, nil)
+		if err != nil {
+			t.Fatalf("GetTasks(%s): %v", benchID, err)
+		}
+		for _, task := range tasks {
+			seen[task.ID] = true
+			if pfx, ok := nameAndDesc[task.ID]; ok {
+				if !strings.HasPrefix(task.Name, "xx:") {
+					t.Fatalf("task %s Name not translator-routed: %q", task.ID, task.Name)
+				}
+				if !strings.HasPrefix(task.Description, "xx:") {
+					t.Fatalf("task %s Description not translator-routed: %q", task.ID, task.Description)
+				}
+				if !ft.sawKey(pfx.namePfx + ".name") {
+					t.Fatalf("translator never asked for %s.name", pfx.namePfx)
+				}
+				if !ft.sawKey(pfx.descPfx + ".desc") {
+					t.Fatalf("translator never asked for %s.desc", pfx.descPfx)
+				}
+			}
+			if pfx, ok := descOnly[task.ID]; ok {
+				if !strings.HasPrefix(task.Description, "xx:") {
+					t.Fatalf("task %s Description not translator-routed: %q", task.ID, task.Description)
+				}
+				if !ft.sawKey(pfx + ".desc") {
+					t.Fatalf("translator never asked for %s.desc", pfx)
+				}
+			}
+		}
+	}
+	for id := range nameAndDesc {
+		if !seen[id] {
+			t.Fatalf("built-in task %s was never produced by GetTasks", id)
+		}
+	}
+	for id := range descOnly {
+		if !seen[id] {
+			t.Fatalf("built-in task %s was never produced by GetTasks", id)
+		}
+	}
+}
+
+// TestNoopTranslator_TaskBundleKeys verifies the English fallback resolves every
+// round-409 task key to a non-empty, stable string.
+func TestNoopTranslator_TaskBundleKeys(t *testing.T) {
+	n := NoopTranslator{}
+	for _, key := range []string{
+		"task.swe_001.name", "task.swe_001.desc",
+		"task.swe_002.name", "task.swe_002.desc",
+		"task.swe_003.name", "task.swe_003.desc",
+		"task.he_001.desc", "task.he_002.desc",
+		"task.mmlu_001.name", "task.mmlu_001.desc",
+		"task.mmlu_002.name", "task.mmlu_002.desc",
+		"task.mmlu_003.name", "task.mmlu_003.desc",
+		"task.gsm8k_001.name", "task.gsm8k_001.desc",
+		"task.gsm8k_002.name", "task.gsm8k_002.desc",
+	} {
+		got := n.Translate(key, nil)
+		if got == "" || got == key {
+			t.Fatalf("NoopTranslator returned no fallback for task key %q: %q", key, got)
+		}
+	}
+}
+
 // TestSetTranslator_NilRestoresNoop verifies SetTranslator(nil) restores the
 // English fallback so the library stays usable without an i18n backend.
 func TestSetTranslator_NilRestoresNoop(t *testing.T) {

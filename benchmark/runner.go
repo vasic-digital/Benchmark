@@ -120,8 +120,8 @@ func (r *StandardBenchmarkRunner) createSWEBenchTasks() []*BenchmarkTask {
 		{
 			ID:          "swe-001",
 			Type:        BenchmarkTypeSWEBench,
-			Name:        "Fix null pointer exception",
-			Description: "Fix the null pointer exception in the user service",
+			Name:        tr("task.swe_001.name", nil),
+			Description: tr("task.swe_001.desc", nil),
 			Difficulty:  DifficultyEasy,
 			Prompt: `Fix the bug in this code that causes a null pointer exception:
 
@@ -141,8 +141,8 @@ The function should handle the case when user is nil.`,
 		{
 			ID:          "swe-002",
 			Type:        BenchmarkTypeSWEBench,
-			Name:        "Add error handling",
-			Description: "Add proper error handling to the file reader",
+			Name:        tr("task.swe_002.name", nil),
+			Description: tr("task.swe_002.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `Add error handling to this function:
 
@@ -170,8 +170,8 @@ Return an error if reading or parsing fails.`,
 		{
 			ID:          "swe-003",
 			Type:        BenchmarkTypeSWEBench,
-			Name:        "Implement retry logic",
-			Description: "Add retry logic with exponential backoff",
+			Name:        tr("task.swe_003.name", nil),
+			Description: tr("task.swe_003.desc", nil),
 			Difficulty:  DifficultyHard,
 			Prompt: `Implement a retry function with exponential backoff:
 
@@ -194,7 +194,7 @@ func (r *StandardBenchmarkRunner) createHumanEvalTasks() []*BenchmarkTask {
 			ID:          "he-001",
 			Type:        BenchmarkTypeHumanEval,
 			Name:        "has_close_elements",
-			Description: "Check if any two elements are closer than threshold",
+			Description: tr("task.he_001.desc", nil),
 			Difficulty:  DifficultyEasy,
 			Prompt: `Write a function that checks if in given list of numbers, any two numbers are closer to each other than given threshold.
 
@@ -216,7 +216,7 @@ def has_close_elements(numbers: List[float], threshold: float) -> bool:
 			ID:          "he-002",
 			Type:        BenchmarkTypeHumanEval,
 			Name:        "separate_paren_groups",
-			Description: "Separate balanced parentheses groups",
+			Description: tr("task.he_002.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `Separate parentheses groups. Input string contains balanced parentheses.
 
@@ -239,8 +239,8 @@ func (r *StandardBenchmarkRunner) createMMLUTasks() []*BenchmarkTask {
 		{
 			ID:          "mmlu-001",
 			Type:        BenchmarkTypeMMLU,
-			Name:        "Computer Science - Algorithms",
-			Description: "Multiple choice question on algorithms",
+			Name:        tr("task.mmlu_001.name", nil),
+			Description: tr("task.mmlu_001.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `What is the time complexity of binary search on a sorted array of n elements?
 
@@ -256,8 +256,8 @@ Answer with just the letter.`,
 		{
 			ID:          "mmlu-002",
 			Type:        BenchmarkTypeMMLU,
-			Name:        "Mathematics - Calculus",
-			Description: "Multiple choice question on calculus",
+			Name:        tr("task.mmlu_002.name", nil),
+			Description: tr("task.mmlu_002.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `What is the derivative of f(x) = x^3 + 2x^2 - 5x + 1?
 
@@ -273,8 +273,8 @@ Answer with just the letter.`,
 		{
 			ID:          "mmlu-003",
 			Type:        BenchmarkTypeMMLU,
-			Name:        "Physics - Mechanics",
-			Description: "Multiple choice question on mechanics",
+			Name:        tr("task.mmlu_003.name", nil),
+			Description: tr("task.mmlu_003.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `A ball is thrown vertically upward with initial velocity v. What is its velocity at the highest point?
 
@@ -295,8 +295,8 @@ func (r *StandardBenchmarkRunner) createGSM8KTasks() []*BenchmarkTask {
 		{
 			ID:          "gsm8k-001",
 			Type:        BenchmarkTypeGSM8K,
-			Name:        "Basic arithmetic word problem",
-			Description: "Solve a basic arithmetic word problem",
+			Name:        tr("task.gsm8k_001.name", nil),
+			Description: tr("task.gsm8k_001.desc", nil),
 			Difficulty:  DifficultyEasy,
 			Prompt: `Janet's ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
 
@@ -307,8 +307,8 @@ Think step by step and provide the final numerical answer.`,
 		{
 			ID:          "gsm8k-002",
 			Type:        BenchmarkTypeGSM8K,
-			Name:        "Multi-step calculation",
-			Description: "Solve a multi-step calculation problem",
+			Name:        tr("task.gsm8k_002.name", nil),
+			Description: tr("task.gsm8k_002.desc", nil),
 			Difficulty:  DifficultyMedium,
 			Prompt: `A farmer has 3 fields. The first field produces 200 pounds of wheat per acre. The second field produces 250 pounds per acre. The third field produces 300 pounds per acre. If the first field is 10 acres, the second field is 8 acres, and the third field is 6 acres, how many total pounds of wheat does the farmer produce?
 

@@ -154,4 +154,25 @@ var enBundle = map[string]string{
 	"compare.run2_regressed":  "Run 2 regressed with {regressions} regressions and {improvements} improvements",
 	"compare.run2_improved":   "Run 2 improved with {improvements} improvements and {regressions} regressions",
 	"compare.no_difference":   "No significant difference between runs",
+	// Built-in benchmark task names + descriptions (user-facing labels shown
+	// when a benchmark's task list is rendered to an end user; the Prompt /
+	// Expected payloads are evaluation fixtures, NOT routed through tr()).
+	"task.swe_001.name": "Fix null pointer exception",
+	"task.swe_001.desc": "Fix the null pointer exception in the user service",
+	"task.swe_002.name": "Add error handling",
+	"task.swe_002.desc": "Add proper error handling to the file reader",
+	"task.swe_003.name": "Implement retry logic",
+	"task.swe_003.desc": "Add retry logic with exponential backoff",
+	"task.he_001.desc":  "Check if any two elements are closer than threshold",
+	"task.he_002.desc":  "Separate balanced parentheses groups",
+	"task.mmlu_001.name": "Computer Science - Algorithms",
+	"task.mmlu_001.desc": "Multiple choice question on algorithms",
+	"task.mmlu_002.name": "Mathematics - Calculus",
+	"task.mmlu_002.desc": "Multiple choice question on calculus",
+	"task.mmlu_003.name": "Physics - Mechanics",
+	"task.mmlu_003.desc": "Multiple choice question on mechanics",
+	"task.gsm8k_001.name": "Basic arithmetic word problem",
+	"task.gsm8k_001.desc": "Solve a basic arithmetic word problem",
+	"task.gsm8k_002.name": "Multi-step calculation",
+	"task.gsm8k_002.desc": "Solve a multi-step calculation problem",
 }
